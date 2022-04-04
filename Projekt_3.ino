@@ -12,6 +12,8 @@
 #define SS_PIN 10
 #define RST_PIN 5
 
+
+
 MFRC522 rfid(SS_PIN, RST_PIN);
 
 byte correct_card[4] = {0x8A, 0x41, 0xA7, 0xBE}; // en array med bytes för kotet // 0x finns för att säga att det är hexa decimalt
@@ -25,16 +27,16 @@ void setup() {
 }
 
 void loop() {
-  if (rfid.PICC_IsNewCardPresent()) { // is there a new tag detected?
-    if (rfid.PICC_ReadCardSerial()) { // try to read, on success, enter the if statement
+  if (rfid.PICC_IsNewCardPresent()) { // Här kollar den om den har upptäckt ett nytt kort
+    if (rfid.PICC_ReadCardSerial()) { // Försöker läsa, Om den lyckas, initiera if-satsen
       MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
       Serial.print("RFID/NFC Tag Type: ");
-      Serial.println(rfid.PICC_GetTypeName(piccType));
+      //Serial.println(rfid.PICC_GetTypeName(piccType));
 
       // print NUID in Serial Monitor in the hex format
       Serial.print("UID:");
-      for (int i = 0; i < rfid.uid.size; i++) {
-        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
+      for (int i = 0; i < rfid.uid.size; i++) {  // intiterar en loop med längden på arrayen på NFC kortet
+        Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " "); // printar varje element i kortets array  
         Serial.print(rfid.uid.uidByte[i], HEX);
       }
       Serial.println();
@@ -45,7 +47,9 @@ void loop() {
           flag = false;
       }
       if (flag)
-        Serial.println("COrrect card");
+        Serial.println("Correct card");
+      else 
+        Serial.println("Dra åt helvette");
 
       rfid.PICC_HaltA(); // halt PICC
       rfid.PCD_StopCrypto1(); // stop encryption on PCD, cannot find new tags if we don't call this after communication with a tag
