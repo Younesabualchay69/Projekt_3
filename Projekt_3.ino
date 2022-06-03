@@ -1,10 +1,4 @@
-/*
-   Created by ArduinoGetStarted.com
 
-   This example code is in the public domain
-
-   Tutorial page: https://arduinogetstarted.com/tutorials/arduino-rfid-nfc
-*/
 
 #include <SPI.h>
 #include <MFRC522.h>
@@ -84,12 +78,12 @@ void loop() {
 
         }
         Serial.println();
-        if (digitalRead(btn_2) == HIGH) {
+        if (digitalRead(btn_2) == HIGH) {   //Raderar kortet som avläses
           Serial.println("btn_2");
           /* Find the right card */
           int right_card = -1;
           bool flag = true;
-          // Iterate over cards
+          // Itererar över kort
           for (int i = 0; i < number_of_cards; i++) {
             if (flag == true && i != 0)
               break;
@@ -107,11 +101,11 @@ void loop() {
               break;
             }
           }
-          Serial.print("Found card on index ");
+          Serial.print("Hittade kortet på index: ");
           Serial.println(right_card);
-          /* Remove the right card */
+          /* ta bort right card */
           if (right_card != -1) {
-            Serial.println("Cards before");
+            Serial.println("Kort innan");
             for (int i = 0; i < number_of_cards; i++) {
               for (int j = 0; j < 4; j++) {
                 Serial.print(valid_cards[i][j], HEX);
@@ -155,7 +149,7 @@ void loop() {
             number_of_cards++;
           }
           else {
-            Serial.println("Dickhead");
+            Serial.println("Du har redan registrerat detta kort");
           }
         }
 
@@ -201,14 +195,14 @@ void loop() {
           }
 
           else {
-            Serial.println("Dra åt helvette");
+            Serial.println("Dra åt helvette, åtkomst nekad");
             digitalWrite(buzzer, HIGH);
 
             digitalWrite(buzzer, LOW);
 
 
           }
-        }
+        }  
 
         rfid.PICC_HaltA(); // halt PICC
         rfid.PCD_StopCrypto1(); // stop encryption on PCD, cannot find new tags if we don't call this after communication with a tag
